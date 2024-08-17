@@ -6,18 +6,18 @@
                         <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                             Register
                         </h1>
-                        <form class="space-y-4 md:space-y-6" method="POST" action="/" >
+                        <form class="space-y-4 md:space-y-6" @submit="register">
                             <div>
                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Your Username</label>
-                                <input type="text" name="name" id="name" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name" required="">
+                                <input type="text" name="name" id="name" v-model="user.name" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name" required="">
                             </div>
                             <div>
                                 <label for="email" class="bblock mb-2 text-sm font-medium text-gray-900">Your Email</label>
-                                <input type="email" name="email" id="email" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name@company.com" required="">
+                                <input type="email" name="email" id="email" v-model="user.email" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name@company.com" required="">
                             </div>
                             <div>
                                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
-                                <input type="password" name="password" id="password" placeholder="••••••••" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" required="">
+                                <input type="password" name="password" id="password" v-model="user.password" placeholder="••••••••" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" required="">
                             </div>
                             <button type="submit" class="w-full bg-gray-200 text-gray-900 rounded-md font-medium text-sm px-5 py-2.5 text-center">Sign up</button>
                             <p class="text-sm font-light text-gray-500">
@@ -31,8 +31,26 @@
     </div>
 </template>
 
-<script>
-export default{
-    name: "Register"
-}    
+<script setup>
+import store from '@/store';
+import { useRouter } from 'vue-router'; // Import the useRouter hook
+
+const router = useRouter();
+
+const user = {
+    name: '',
+    email: '',
+    password: '',
+}
+
+function register(ev) {
+    ev.preventDefault();
+    store
+    .dispatch('register', user)
+    .then(() => {
+        router.push({
+            name: 'Home'
+        })
+    })
+}
 </script>
