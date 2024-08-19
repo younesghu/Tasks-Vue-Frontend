@@ -1,5 +1,5 @@
-import {createStore} from "vuex";
-
+import { createStore } from "vuex";
+import axiosClient from "@/axios";
 const store = createStore({
     state: {
         user: {
@@ -10,24 +10,24 @@ const store = createStore({
     getters: {},
     actions: {
         register({ commit }, user) {
-            return fetch('http://127.0.0.1:8000/api/auth/register', {
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                method: "POST",
-                body: JSON.stringify(user),
+            return axiosClient.post('/register', user)
+                .then(({ data }) => {
+                    commit('setUser', data);
+                    return data;
             })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.token) { // Make sure the response contains a token
-                    commit("setUser", res);
-                }
-                return res;
-            })
-            .catch((error) => {
-                console.error('Error during registration:', error);
-                throw error;
+        },
+        login({ commit }, user) {
+            return axiosClient.post('/login', user)
+            .then(({ data }) => {
+                commit('setUser', data);
+                return data;
+            });
+        },
+        logout({ commit }) {
+            return axiosClient.post('/logout')
+            .then((response) => {
+                commit('logout');
+                return response;
             });
         },
     },
@@ -39,8 +39,8 @@ const store = createStore({
         },
         setUser: (state, userData) => {
             state.user.token = userData.token;
-            sessionStorage.setItem("TOKEN", userData.token);
             state.user.data = userData.user;
+            sessionStorage.setItem("TOKEN", userData.token);
         }
     },
     modules: {}

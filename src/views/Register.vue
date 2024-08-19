@@ -12,7 +12,7 @@
                                 <input type="text" name="name" id="name" v-model="user.name" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name" required="">
                             </div>
                             <div>
-                                <label for="email" class="bblock mb-2 text-sm font-medium text-gray-900">Your Email</label>
+                                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Your Email</label>
                                 <input type="email" name="email" id="email" v-model="user.email" class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none" placeholder="name@company.com" required="">
                             </div>
                             <div>
@@ -33,10 +33,9 @@
 
 <script setup>
 import store from '@/store';
-import { useRouter } from 'vue-router'; // Import the useRouter hook
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
 const user = {
     name: '',
     email: '',
@@ -45,8 +44,7 @@ const user = {
 
 function register(ev) {
     ev.preventDefault();
-    store
-    .dispatch('register', user)
+    store.dispatch('register', user)
     .then(() => {
         router.push({
             name: 'Home'

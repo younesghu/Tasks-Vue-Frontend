@@ -23,13 +23,25 @@
                         Add Task
                     </button>
                 </form>
+                <button @click="logout" class="mt-4 w-full rounded-md bg-red-500 text-white font-medium text-sm px-5 py-2.5 text-center">
+                    Sign Out
+                </button>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-export default{
-    name: "Home"
-}    
+<script setup>
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
+
+function logout() {
+    store.dispatch("logout").then(() => {
+        router.push({ name: "Login" });
+    });
+}
+
 </script>
