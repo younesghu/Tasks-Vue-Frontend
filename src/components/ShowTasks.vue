@@ -1,6 +1,6 @@
 <template>
-    <div class="xs:h-screen bg-gray-50 border w- border-gray-300 rounded-md shadow p-4 space-y-2">
-      <div v-for="task in tasks" :key="task.id" class="flex items-start">
+    <div class="xs:h-screen bg-gray-50 border w- border-gray-300 rounded-md shadow p-4 space-y-2" id="tasks">
+      <div v-for="task in tasks.data" :key="task.id" class="flex items-start">
         <!-- Checkbox -->
         <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-0 mt-1">
   
@@ -15,22 +15,10 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue';
-import axiosTask from '@/axiosTask.js';
+import store from "../store";
+import { computed } from "vue";
 
-const tasks = ref([]);
+const tasks = computed(() => store.state.tasks);
 
-const fetchTasks = async () => {
-  try {
-    const response = await axiosTask.get('/');
-    tasks.value = response.data;
-  } catch (error) {
-    console.error("Error fetching tasks:", error);
-  }
-};
-
-onMounted(() => {
-  fetchTasks();
-});
-
+store.dispatch("getTasks");
 </script>

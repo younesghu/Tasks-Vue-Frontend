@@ -1,11 +1,15 @@
 import { createStore } from "vuex";
 import axiosClient from "@/axios";
+import axiosTask from "@/axiosTask";
 const store = createStore({
     state: {
         user: {
             data: {},
             token: sessionStorage.getItem("TOKEN"),
-        }
+        },
+        tasks: {
+            data: [],
+        },
     },
     getters: {},
     actions: {
@@ -26,12 +30,22 @@ const store = createStore({
         logout({ commit }) {
             return axiosClient.post('/logout')
             .then((response) => {
-                commit('logout');
+                commit('logout');   
                 return response;
             });
         },
+        getTasks({ commit }) {
+            return axiosTask.get('/')
+                .then(({ data }) => {
+                    commit("setTasks", data);
+                    return data;
+                });
+        },
     },
     mutations: {
+        setTasks: (state, tasks) => {
+            state.tasks.data = tasks.data ? tasks.data : tasks;
+        },
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
