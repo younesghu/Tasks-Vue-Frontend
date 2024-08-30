@@ -1,7 +1,9 @@
 <template>
-    <button @click="logout" class="mt-4 w-30 rounded-md bg-red-500 text-white font-medium text-sm px-5 py-2.5 text-center">
-        Sign Out
-    </button>
+    <div class="flex justify-end">
+        <button @click="logout" class="m-4 w-30 rounded bg-red-400 text-white font-medium text-sm px-5 py-2.5 text-center">
+            Sign Out
+        </button>
+    </div>
     <ShowTasks />
     <AddTask />
 

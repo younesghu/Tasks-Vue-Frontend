@@ -52,14 +52,28 @@ const store = createStore({
                 return data;
             });
         },
-        updateTaskStatus({ commit }, { id, status }) {
-            return axiosTask.put(`/${id}`, { status })
-                .then(({ data }) => {
-                    commit('updateTask', data.task);
-                }).catch(error => {
-                    console.error("There was an error updating the task status:", error);
-                });
-        },
+        updateTaskStatus({ commit, state }, taskId) {
+            const task = state.tasks.data.find(task => task.id === taskId);
+          
+            if (task) {
+              const newStatus = task.status === "incomplete" ? "complete" : "incomplete";
+          
+              return axiosTask.put(`/${taskId}`, { status: newStatus }, {
+                headers: {
+                  Authorization: `Bearer ${state.user.token}`
+                }
+              })
+              .then(({ data }) => {
+                // Make sure the API response contains the updated task
+                commit('updateTask', data.data);  // Adjust according to your API response
+              })
+              .catch(error => {
+                console.error("There was an error updating the task status:", error);
+              });
+            } else {
+              console.error("Task not found in state:", taskId);
+            }
+          },
         deleteTask({ commit }, taskId) {
             return axiosTask.delete(`/${taskId}`)
               .then(() => {
@@ -80,12 +94,14 @@ const store = createStore({
         updateTask: (state, updatedTask) => {
             const index = state.tasks.data.findIndex(task => task.id === updatedTask.id);
             if (index !== -1) {
-                state.tasks.data[index] = updatedTask;
+              state.tasks.data[index] = updatedTask;  // Replace the task object directly
+            } else {
+              console.error("Task not found in state:", updatedTask);
             }
         },
         removeTask: (state, taskId) => {
             state.tasks.data = state.tasks.data.filter(task => task.id !== taskId);
-          },
+        },
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
