@@ -32,14 +32,15 @@
 </template>
 
 <script setup>
+
 import store from '@/store';
 import { useRouter } from 'vue-router';
 import { ref } from "vue";
 
 const router = useRouter();
 const user = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
 }
 
 let errorMsg = ref('');

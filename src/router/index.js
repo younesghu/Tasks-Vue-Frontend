@@ -30,16 +30,16 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
-})
+});
 
 router.beforeEach((to, from, next)=> {
-    if(to.meta.requiresAuth && !store.state.user.token){
+    if(to.meta.requiresAuth && !store.state.user.access_token){
         next({name : 'Login'})
-    } else if (store.state.user.token && (to.name === 'Login' || to.name === 'Register')) {
+    } else if (store.state.user.access_token && (to.name === 'Login' || to.name === 'Register')) {
         next({name: 'Home'});
     } else {
         next()
     }
-})
+});
 
 export default router;
