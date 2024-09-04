@@ -3,6 +3,7 @@ import axiosClient from "@/axios";
 
 const store = createStore({
     state: {
+        addTask: false,
         user: {
             data: {},
             access_token: localStorage.getItem("access_token"),
@@ -46,12 +47,19 @@ const store = createStore({
                 .then(({ data }) => {
                     commit("setTasks", data);
                     return data;
-                });
+            });
         },
-        addTask({ commit, state }, task) {
+        openAddTaskModal({ commit }) {
+            commit('OPEN_ADD_TASK_MODAL');
+        },
+        closeModalAddTask({ commit }) {
+            commit('CLOSE_ADD_TASK_MODAL');
+        },
+        addTask({ commit }, task) {
             return axiosClient.post("/tasks", task)
             .then(({ data }) => {
                 commit('addTask', data.task);
+                commit('CLOSE_ADD_TASK_MODAL');
                 return data;
             });
         },
@@ -104,6 +112,12 @@ const store = createStore({
         },
         addTask: (state, task) => {
             state.tasks.data.push(task);
+        },
+        OPEN_ADD_TASK_MODAL(state) {
+            state.addTask = true;
+        },
+        CLOSE_ADD_TASK_MODAL(state) {
+            state.addTask = false;
         },
         updateTask: (state, updatedTask) => {
             const index = state.tasks.data.findIndex(task => task.id === updatedTask.id);
