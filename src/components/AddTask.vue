@@ -1,16 +1,18 @@
 <template>
     <div v-show="modalOpen" class="fixed bg-gray-900 w-full bg-opacity-30 min-h-full top-0 left-0 flex justify-center items-center px-8 sm:px-4 py-4 backdrop-blur-sm">
 
-      <!-- Close Form Button -->
-      <button @click="closeAppModal" class="absolute text-4xl top-8 right-10 text-gray-900">
-        <i class="fa fa-window-close" aria-hidden="true"></i>
-      </button>
-
-      <!-- Create Task Form -->
+      <!-- Parent div for create Task Form -->
       <div class="w-full bg-gray-50 rounded-md shadow border border-gray-300 md:mt-0 sm:max-w-md xl:p-0">
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
 
-          <!-- Form Title -->
+        <!-- Close Form Button -->
+        <button @click="closeAppModal" class="flex m-1 float-end text-2xl text-gray-900">
+            <i class="fa fa-window-close" aria-hidden="true"></i>
+        </button>
+
+        <!-- Form Title -->
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">  
+          
+          <!-- Form header -->
           <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
             Create a Task
           </h1>
