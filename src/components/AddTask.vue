@@ -1,26 +1,40 @@
 <template>
     <div v-show="modalOpen" class="fixed bg-gray-900 w-full bg-opacity-30 min-h-full top-0 left-0 flex justify-center items-center px-8 sm:px-4 py-4 backdrop-blur-sm">
-      <button @click="closeAppModal" class="absolute text-4xl top-8 left-8 text-gray-900">
+
+      <!-- Close Form Button -->
+      <button @click="closeAppModal" class="absolute text-4xl top-8 right-10 text-gray-900">
         <i class="fa fa-window-close" aria-hidden="true"></i>
       </button>
+
+      <!-- Create Task Form -->
       <div class="w-full bg-gray-50 rounded-md shadow border border-gray-300 md:mt-0 sm:max-w-md xl:p-0">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+
+          <!-- Form Title -->
           <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
             Create a Task
           </h1>
+
+          <!-- Form -->
           <form class="space-y-4 md:space-y-6" @submit.prevent="addTask">
-            <div>
+            
+            <!-- Task title -->
+            <div>              
               <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Task Title</label>
               <input type="text" id="title" v-model="title" name="title" placeholder="Enter task title"
                 class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none"
                 required>
             </div>
+
+            <!-- Task Content -->
             <div>
               <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Task Description</label>
               <textarea id="description" v-model="description" name="description" rows="4" placeholder="Enter task description"
                 class="bg-white border border-gray-500 rounded text-gray-900 sm:text-sm block w-full p-2.5 focus:outline-none"
                 required></textarea>
             </div>
+
+            <!-- Submit button -->
             <button type="submit"
               class="w-full rounded-md bg-gray-200 text-gray-900 font-medium text-sm px-5 py-2.5 text-center">
               Add Task
