@@ -1,5 +1,5 @@
 <template>
-  <div class="xs:h-screen bg-yellow-100 border w-full border-gray-300 rounded-md shadow p-4" id="tasks">
+  <div class="xs:h-screen bg-yellow-100 border w-full border-gray-300 rounded-md shadow p-4 mb-4" id="tasks">
   
     <!-- Show this paragraph if no tasks are created yet-->
     <div v-if="tasks.incomplete.length === 0 && tasks.complete.length === 0" class="text-center text-gray-800">
