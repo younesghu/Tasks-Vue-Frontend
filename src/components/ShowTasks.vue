@@ -3,7 +3,7 @@
   
     <!-- Show this paragraph if no tasks are created yet-->
     <div v-if="tasks.incomplete.length === 0 && tasks.complete.length === 0" class="text-center text-gray-800">
-      <p>Go ahead and add a task in the form below to get you started.</p>
+      <p>Go ahead and add a task in the form on top to get you started.</p>
     </div>
 
     <!-- Parent div for Incomplete & Complete Tasks -->
