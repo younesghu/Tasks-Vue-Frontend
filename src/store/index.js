@@ -1,9 +1,11 @@
 import { createStore } from "vuex";
 import axiosClient from "@/axios";
+import Register from "@/views/Register.vue";
 
 const store = createStore({
     state: {
         addTask: false,
+        loader: false,
         user: {
             data: {},
             access_token: localStorage.getItem("access_token"),
@@ -12,40 +14,56 @@ const store = createStore({
             data: [],
         },
     },
-    getters: {},
+    getters: {
+        isLoading: (state) => state.loader,
+    },
     actions: {
+        showLoader({commit}) {
+            commit('setLoader', true)
+        },
+        hideLoader({commit}) {
+            commit('setLoader', false)
+        },
         getUser({ commit }) {
             return axiosClient.get("/auth/user").then((response) => {
                 commit("setUser", response.data);
             });
         },
-        register({ commit }, user) {
+        register({ commit, dispatch }, user) {
+            dispatch('showLoader')
             return axiosClient.post('/auth/register', user)
                 .then(({ data }) => {
                     commit('setUser', data.user);
                     commit("setToken", data.access_token);
+                    dispatch('showLoader')
                     return data;
             })
         },
-        login({ commit }, user) {
+        login({ commit, dispatch }, user) {
+            dispatch('showLoader');
             return axiosClient.post('/auth/login', user)
             .then(({ data }) => {
                 commit('setUser', data.user);
                 commit("setToken", data.access_token);
+                dispatch('hideLoader');
                 return data;
             });
         },
-        logout({ commit }) {
+        logout({ commit, dispatch }) {
+            dispatch('showLoader');
             return axiosClient.post('/auth/logout')
             .then((response) => {
-                commit('logout');   
+                commit('logout');
+                dispatch('hideLoader');   
                 return response;
             });
         },
-        getTasks({ commit }) {
+        getTasks({ commit, dispatch }) {
+            dispatch('showLoader');
             return axiosClient.get('/tasks')
                 .then(({ data }) => {
                     commit("setTasks", data);
+                    dispatch('hideLoader');   
                     return data;
             });
         },
@@ -55,20 +73,23 @@ const store = createStore({
         closeModalAddTask({ commit }) {
             commit('CLOSE_ADD_TASK_MODAL');
         },
-        addTask({ commit }, task) {
+        addTask({ commit, dispatch }, task) {
+            dispatch('showLoader');
             return axiosClient.post("/tasks", task)
             .then(({ data }) => {
-                commit('addTask', data.task);
                 commit('CLOSE_ADD_TASK_MODAL');
+                commit('addTask', data.task);
+                dispatch('hideLoader');   
                 return data;
             });
         },
-        updateTaskStatus({ commit, state }, taskId) {
+        updateTaskStatus({ commit, dispatch, state }, taskId) {
             const task = state.tasks.data.find(task => task.id === taskId);
           
             if (task) {
               const newStatus = task.status === "incomplete" ? "complete" : "incomplete";
-          
+            
+              dispatch('showLoader');
               return axiosClient.put(`/tasks/${taskId}`, { status: newStatus }, {
                 headers: {
                   Authorization: `Bearer ${state.user.access_token}`
@@ -76,6 +97,7 @@ const store = createStore({
               })
               .then(({ data }) => {
                 commit('updateTask', data.data);
+                dispatch('hideLoader')
               })
               .catch(error => {
                 console.error("There was an error updating the task status:", error);
@@ -84,10 +106,12 @@ const store = createStore({
               console.error("Task not found in state:", taskId);
             }
           },
-        deleteTask({ commit }, taskId) {
+        deleteTask({ commit, dispatch }, taskId) {
+            dispatch('showLoader');
             return axiosClient.delete(`/tasks/${taskId}`)
               .then(() => {
                 commit('removeTask', taskId);
+                dispatch('hideLoader');
               })
               .catch(error => {
                 console.error("There was an error deleting the task:", error);
@@ -97,6 +121,9 @@ const store = createStore({
     mutations: {
         setUser: (state, user) => {
             state.user.data = user;
+        },
+        setLoader: (state, boolean) => {
+            state.loader = boolean;
         },
         setToken: (state, access_token) => {
             state.user.access_token = access_token;

@@ -48,44 +48,44 @@
   </template>
   
   <script>
-  export default {
-    data() {
-      return {
-        title: '',
-        description: '',
-        modalOpen: false,
-      };
-    },
-    mounted() {
-      this.$store.watch(
-        (state) => state.addTask,
-        (newValue) => {
-          this.modalOpen = newValue;
-        }
-      );
-    },
-    methods: {
-      closeAppModal() {
-        this.$store.dispatch('closeModalAddTask');
-        this.clearForm();
-        this.modalOpen = false;
+    export default {
+      data() {
+        return {
+          title: '',
+          description: '',
+          modalOpen: false,
+        };
       },
-      addTask() {
-        this.$store.dispatch('addTask', {
-          title: this.title,
-          description: this.description,
-        })
-        .then(() => {
+      mounted() {
+        this.$store.watch(
+          (state) => state.addTask,
+          (newValue) => {
+            this.modalOpen = newValue;
+          }
+        );
+      },
+      methods: {
+        closeAppModal() {
+          this.$store.dispatch('closeModalAddTask');
           this.clearForm();
-        })
-        .catch((error) => {
-          console.error("There was an error creating the task:", error);
-        });
-      },
-      clearForm() {
-        this.title = '';
-        this.description = '';
+          this.modalOpen = false;
+        },
+        addTask() {
+          this.$store.dispatch('addTask', {
+            title: this.title,
+            description: this.description,
+          })
+          .then(() => {
+            this.clearForm();
+          })
+          .catch((error) => {
+            console.error("There was an error creating the task:", error);
+          });
+        },
+        clearForm() {
+          this.title = '';
+          this.description = '';
+        }
       }
-    }
-  };
+    };
   </script>
